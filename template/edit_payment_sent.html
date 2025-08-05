@@ -1,0 +1,210 @@
+{% include "header.html" %}
+<div class="body-wrapper-inner">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-9">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4 text-center">Payment Sent</h4>
+                        <form action="/save_edited_payment_sent/" method="post">
+                            {% csrf_token %}
+                            <div class="row">
+
+                                <input type="hidden" name="payment_sent_id" value="{{payment_sent.id}}">
+
+                                <!-- Booking Number -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="booking_number" class="form-label">Booking Number</label>
+                                    <input type="text" class="form-control" id="booking_number" name="booking_number" value="{{payment_sent.booking_number}}">
+                                </div>
+
+
+                                <!-- Booking Date -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="date" class="form-label">Payment Sent Date</label>
+                                    <input type="date" class="form-control" id="date" name="date" value="{{payment_sent.date}}">
+                                </div>
+
+                                <script>
+                                    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+                                    document.getElementById('date').value = today; // Set it as the default value
+                                </script>
+
+                                <!-- Vehicle Type -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="vehicle_type" class="form-label">Select Vehicle Type</label>
+                                    <select name="vehicle_type" id="vehicle_type" class="form-control"
+                                        onchange="findVehicle()">
+                                        <option value="{{payment_sent.vehicle_type}}" disabled selected>{{payment_sent.vehicle.vehicle_type}}</option>
+                                        {% for vehicle_type in vehicle_types %}
+                                        <option value="{{vehicle_type.id}}">{{vehicle_type.vehicle_type}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <!-- Vehicle -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="vehicle" class="form-label">Select Vehicle</label>
+                                    <select name="vehicle" id="vehicle_box" class="form-control"
+                                        onchange="findPendigAmount()">
+                                        <option value="selected" disabled selected>Selected</option>
+                                    </select>
+                                </div>
+
+
+                                <!-- Cash -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="cash" class="form-label">Cash</label>
+                                    <input type="number" class="form-control" id="cash" name="cash" value="{{payment_sent.cash}}"
+                                        onchange="[findTotal(),findTotalPendigAmount()]">
+                                </div>
+
+                                <!-- Online -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="online" class="form-label">Online</label>
+                                    <input type="number" class="form-control" id="online" name="online" value="{{payment_sent.online}}"
+                                        onchange="[findTotal(),findTotalPendigAmount()]">
+                                </div>
+
+                                <!-- UTR Number -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="utr" class="form-label">UTR Number</label>
+                                    <input type="text" class="form-control" id="utr" name="utr"
+                                        placeholder="Eg. 4585568168323" value="{{payment_sent.utr}}">
+                                </div>
+
+                                <!-- Transaction ID -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="transaction_id" class="form-label">Transaction ID</label>
+                                    <input type="text" class="form-control" id="transaction_id" name="transaction_id" value="{{payment_sent.transaction_id}}"
+                                        placeholder="Eg. T456548615318768546">
+                                </div>
+
+                                <!-- Total -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="total" class="form-label">Total</label>
+                                    <input type="number" class="form-control" id="total" name="total">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="amount_to_send_vehicle_owner" class="form-label">Previous Amount</label>
+                                    <input type="number" class="form-control" id="amount_to_send_vehicle_owner"
+                                        name="amount_to_send_vehicle_owner" onchange="findTotalPendigAmount()">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="pending_amount" class="form-label">Pending Amount</label>
+                                    <input type="number" class="form-control" id="pending_amount" name="pending_amount">
+                                </div>
+
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary">Save Payment Recived</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <h4 class="mt-5 text-center">Payment Send Table</h4>
+            <a href="{% url 'payment_sent' %}" class="btn btn-secondary">Reset Filters</a>
+            <div class="table-responsive">
+                <table class="table table-bordered mt-3">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Action</th>
+                            <th>Sr. No.</th>
+                            <th>Booking Date</th>
+                            <th>Vehicle Type</th>
+                            <th>Vehicle</th>
+                            <th>Cash</th>
+                            <th>Online</th>
+                            <th>Transaction ID</th>
+                            <th>UTR</th>
+                            <th>Total Amount Sent</th>
+                            <th>Previous Balance Amount to send</th>
+                            <th>Total Balance Amount to send</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for payment_sent in payment_sents %}
+                        <tr>
+                            <td>
+                                <a href="/edit_payment_sent/?id={{payment_sent.id}}"><button
+                                        class="btn">Edit</button></a>
+                                <a href="/delete_payment_sent/?id={{payment_sent.id}}"><button
+                                        class="btn">Delete</button></a>
+                            </td>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{ payment_sent.date }}</td>
+                            <td>{{ payment_sent.vehicle_type }}</td>
+                            <td>{{ payment_sent.vehicle }}</td>
+                            <td>{{ payment_sent.cash }}</td>
+                            <td>{{ payment_sent.online }}</td>
+                            <td>{{ payment_sent.transaction_id }}</td>
+                            <td>{{ payment_sent.utr }}</td>
+                            <td>{{ payment_sent.total }}</td>
+                            <td>{{ payment_sent.previous_amount }}</td>
+                            <td>{{ payment_sent.balance_amount }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    // Find Total
+    function findTotal() {
+        var cash = parseFloat(document.getElementById('cash').value) || 0;
+        var online = parseFloat(document.getElementById('online').value) || 0;
+        var total = cash + online;
+        document.getElementById('total').value = total;
+    }
+
+    function findPendigAmount() {
+        var vehicle_id = document.getElementById('vehicle_box').value;
+        $.ajax({
+
+            url: "/get_previous_amount_to_send_vehicle_owner/?id=" + vehicle_id
+        }).done(function (result) {
+            var previous_amount = result.vehicle.pending_amount || 0;
+            document.getElementById('amount_to_send_vehicle_owner').value = previous_amount;
+            // console.log(result.owner);
+            console.log(result);
+        });
+    }
+
+    function findVehicle() {
+        var vehicle_type_id = document.getElementById("vehicle_type").value;
+        $.ajax({ "url": "/get_all_vehicle/?id=" + vehicle_type_id }).done(
+            function (result) {
+
+                // console.log(result.citys);
+
+                var vehicles = result.vehicles;
+                var row = '';
+                for (var i = 0; i < vehicles.length; i++) {
+                    row = row + '<option value="' + vehicles[i].id + '">' + vehicles[i].vehicle_number + '</option>';
+                }
+                print(row)
+                // console.log(row);
+                document.getElementById('vehicle_box').innerHTML = row;
+            }
+        );
+    }
+
+
+    function findTotalPendigAmount() {
+        var total = parseInt(document.getElementById('total').value) || 0;
+        var previous_amount = parseInt(document.getElementById('amount_to_send_vehicle_owner').value) || 0;
+        var pending_amount = previous_amount - total;
+        document.getElementById('pending_amount').value = pending_amount;
+    }
+
+</script>
+{% include 'footer.html' %}

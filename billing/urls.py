@@ -83,6 +83,8 @@ urlpatterns = [
     # PAYMENT SENT
     path('payment_sent/', wb.payment_sent, name='payment_sent'),
     path('save_payment_sent/', wb.save_payment_sent, name='save_payment_sent'),
+    path('edit_payment_sent/', wb.edit_payment_sent, name='edit_payment_sent'),
+    path('save_edited_payment_sent/', wb.save_edited_payment_sent, name='save_edited_payment_sent'),
     path('delete_payment_sent/', wb.delete_payment_sent, name='delete_payment_sent'),
 
 

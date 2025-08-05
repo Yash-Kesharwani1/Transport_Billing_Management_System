@@ -749,7 +749,7 @@ def edit_payment_recived(req):
     # Getting Previous Amount using payment_recived
     previous_amount = payment_recived.previous_amount
 
-    print(previous_amount)
+    print(previous_party.party_pending_amt)
 
     previous_party.party_pending_amt = previous_amount
 
@@ -848,7 +848,48 @@ def save_payment_sent(req):
     return redirect('/payment_sent/')
 
 
+def edit_payment_sent(req):
+    
+    payment_sent = models.PaymentSent.objects.get(id=req.GET['id'])
 
+    # Getting Previous Vehicle using payment_sent
+    previous_vehicle = payment_sent.vehicle
+
+    print(f"{previous_vehicle.balance_amount} -->> {payment_sent.previous_amount}")
+
+    # Changing the balance_amount of previous vehicle
+    previous_vehicle.balance_amount = payment_sent.previous_amount
+
+    print(f"{previous_vehicle.balance_amount} -->> {payment_sent.previous_amount}")
+
+    previous_vehicle.save()
+
+    # All VehicleTypes
+    vehicle_types = models.VehicleType.objects.all()
+
+    return render(req,'edit_payment_sent.html', {'payment_sent':payment_sent, 'vehicle_types':vehicle_types})
+
+
+
+def save_edited_payment_sent(req):
+    
+    payment_sent = models.PaymentSent.objects.get(id=req.POST['payment_sent_id'])
+
+    payment_sent.booking_number=req.POST['booking_number']
+    payment_sent.vehicle_type=models.VehicleType.objects.get(id=req.POST['vehicle_type'])
+    payment_sent.vehicle=models.Vehicle.objects.get(id=req.POST['vehicle'])
+    payment_sent.cash=req.POST['cash']
+    payment_sent.online=req.POST['online']
+    payment_sent.transaction_id=req.POST['transaction_id']
+    payment_sent.utr=req.POST['utr']
+    payment_sent.total=req.POST['total']
+    payment_sent.previous_amount=req.POST['amount_to_send_vehicle_owner']
+    payment_sent.balance_amount=req.POST['pending_amount']
+    payment_sent.date=req.POST['date']
+    
+    payment_sent.save()
+
+    return redirect('/payment_sent/')
 
 def delete_payment_sent(req):
 
