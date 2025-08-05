@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="shortcut icon" type="image/png" href="/static/images/logos/favicon.png" />
+    <link rel="stylesheet" href="/static/css/styles.min.css" />
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4 text-center">Create Your Account</h4>
+                        <form action="/save_user/" method="post">
+                            {% csrf_token %}
+
+                            {% if messages %}
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" role="alert">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+
+                            <!-- Username -->
+                            <div class="mb-3">
+                                <label for="user_name" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="user_name" name="user_name"
+                                    placeholder="Enter your name" required>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <label for="user_email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="user_email" name="user_email"
+                                    placeholder="Enter your email" required>
+                            </div>
+
+                           <!-- Mobile -->
+                            <div class="mb-3">
+                                <label for="user_mobile" class="form-label">Mobile Number</label>
+                                <input type="text" class="form-control" id="user_mobile" name="user_mobile"
+                                    placeholder="Enter your mobile number">
+                            </div>
+
+                            <!-- Password -->
+                            <div class="mb-3">
+                                <label for="user_password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="user_password" name="user_password"
+                                    placeholder="At least 8 chars, incl @#$&" required>
+                            </div>
+
+                            <!-- Confirm Password -->
+                            <div class="mb-3">
+                                <label for="user_confirm_password" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="user_confirm_password"
+                                    name="user_confirm_password" placeholder="Confirm password" required>
+                            </div>
+
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary">Register</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

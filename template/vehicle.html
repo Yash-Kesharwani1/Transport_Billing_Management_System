@@ -1,0 +1,124 @@
+{% include "header.html" %}
+<div class="body-wrapper-inner">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+
+      <div class="col-lg-6">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h4 class="card-title mb-4 text-center">Add Vehicle Type</h4>
+            <form action="/save_vehicle_type/" method="post">
+              {% csrf_token %}
+
+              <!-- Vehicle Type -->
+              <div class="mb-3">
+                <label for="vehicle_type" class="form-label">Vehicle Type</label>
+                <input type="text" class="form-control" id="vehicle_type" name="vehicle_type"
+                  placeholder="Enter the type of vehicle">
+              </div>
+
+              <!-- Button -->
+              <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-primary">Add Vehicle Type</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h4 class="card-title mb-4 text-center">Add vehicle</h4>
+            <form action="/save_vehicle/" method="post">
+              {% csrf_token %}
+
+              {% if messages %}
+              {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+              {% endfor %}
+              {% endif %}
+
+
+              <!-- Username -->
+              <div class="mb-3">
+                <label for="owner_name" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="owner_name" name="owner_name" placeholder="Enter your name">
+              </div>
+
+              <!-- Mobile -->
+              <div class="mb-3">
+                <label for="owner_mobile" class="form-label">Mobile Number</label>
+                <input type="text" class="form-control" id="owner_mobile" name="owner_mobile"
+                  placeholder="Enter your mobile number">
+              </div>
+
+              <!-- Vehicle Number -->
+              <div class="mb-3">
+                <label for="vehicle_number" class="form-label">Vehicle Number</label>
+                <input type="text" class="form-control" id="vehicle_number" name="vehicle_number"
+                  placeholder="Enter your mobile number">
+              </div>
+
+              <!-- Vehicle Type -->
+              <div class="mb-3">
+                <label for="vehicle_type" class="form-label">Vehicle Type</label>
+                <select class="form-control" name="vehicle_type" id="vehicle_type">
+                  <option value="" disabled selected>Select Vehicle Type</option>
+                  {% for vehicle_type in vehicle_types %}
+                  <option value="{{vehicle_type.id}}">{{vehicle_type.vehicle_type}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              <!-- Balance Amount -->
+              <div class="mb-3">
+                <label for="balance_amount" class="form-label">Vehicle Number</label>
+                <input type="number" class="form-control" id="balance_amount" name="balance_amount" value="0"
+                  placeholder="Balance Amount">
+              </div>
+
+              <!-- Button -->
+              <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-primary">Add Vehicle</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <h4 class="mt-5 text-center">Owner Details Table</h4>
+      <div class="table-responsive">
+        <table class="table table-bordered mt-3">
+          <thead class="table-light">
+            <tr>
+              <th>Action</th>
+              <th>Sr. No.</th>
+              <th>Vehicle Number</th>
+              <th>Vehicle Owner</th>
+              <th>Vehicle Type</th>
+              <th>Balance Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for vehicle in vehicles %}
+            <tr>
+              <td>
+                <a href="/edit_vehicle/?id={{vehicle.id}}"><button class="btn">Edit</button></a>
+                <a href="/delete_vehicle/?id={{vehicle.id}}"><button class="btn">Delete</button></a>
+              </td>
+              <td>{{forloop.counter}}</td>
+              <td>{{ vehicle.vehicle_number}}</td>
+              <td>{{ vehicle.owner.owner_name }}</td>
+              <td>{{ vehicle.vehicle_type }}</td>
+              <td>{{ vehicle.balance_amount }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% include 'footer.html' %}

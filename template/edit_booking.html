@@ -1,0 +1,269 @@
+{% include "header.html" %}
+<div class="body-wrapper-inner">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-9">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4 text-center">Add Booking</h4>
+                        <form action="/save_edited_booking/" method="post">
+                            {% csrf_token %}
+
+                            <!-- Hidden Gem -->
+                            <input type="text" name="booking_id" value="{{booking.id}}">
+
+                            <div class="row">
+                                <!-- Booking Date -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="booking_date" class="form-label">Booking Date</label>
+                                    <input type="date" class="form-control" id="booking_date" name="booking_date" value="{{booking.booking_date}}">
+                                </div>
+
+                                <!-- <script>
+                                    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+                                    document.getElementById('booking_date').value = today; // Set it as the default value
+                                </script> -->
+
+                                <!-- Party -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="party" class="form-label">Select Party</label>
+                                    <select name="party" id="party" class="form-control" onchange="findPendigAmount()">
+                                        <!-- <option value="selected" disabled selected>Selected</option> -->
+                                        <option value="{{booking.party.id}}">{{booking.party.party_name}}</option>
+                                        {% for party in partys %}
+                                        <option value="{{party.id}}">{{party.party_name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <!-- Vehicle Type -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="vehicle_type" class="form-label">Select Vehicle Type</label>
+                                    <select name="vehicle_type" id="vehicle_type" class="form-control"
+                                        onchange="findVehicle()">
+                                        <!-- <option value="selected" disabled selected>Selected</option> -->
+                                        <option value="{{booking.vehicle_type.id}}">{{booking.vehicle_type.vehicle_type}}</option>
+                                        {% for vehicle_type in vehicle_types %}
+                                        <option value="{{vehicle_type.id}}">{{vehicle_type.vehicle_type}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <!-- Vehicle -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="vehicle" class="form-label">Select Vehicle</label>
+                                    <select name="vehicle" id="vehicle_box" class="form-control">
+                                        <option value="{{booking.vehicle.id}}">{{booking.vehicle.vehicle_number}}</option>
+                                        <!-- <option value="selected" disabled selected>Selected</option> -->
+                                    </select>
+                                </div>
+
+                                <!-- From City -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="from_city" class="form-label">Select From City</label>
+                                    <input type="text" name="from_city" id="from_city" class="form-control" value="{{booking.from_city}}">
+                                </div>
+
+                                <!-- To City -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="to_city" class="form-label">Select To City</label>
+                                    <input type="text" name="to_city" id="to_city" class="form-control" value="{{booking.to_city}}">
+                                </div>
+
+                                <!-- Loading & Unloading Dates -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="loading_date" class="form-label">Loading Date</label>
+                                    <input type="date" class="form-control" id="loading_date" name="loading_date" value="{{booking.loading_date}}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="unloading_date" class="form-label">Unloading Date</label>
+                                    <input type="date" class="form-control" id="unloading_date" name="unloading_date" value="{{booking.unloading_date}}">
+                                </div>
+
+                                <!-- Financial Fields -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="total_hire" class="form-label">Total Hire</label>
+                                    <input type="number" class="form-control" id="total_hire" name="total_hire" onchange="[findSubTotal(),findBalance()]" value="{{booking.total_hire}}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="advance_amount" class="form-label">Advance Amount</label>
+                                    <input type="number" class="form-control" id="advance_amount" name="advance_amount"
+                                        oninput="[findSubTotal(),findBalance()]" value="{{booking.advance_amount}}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="cash" class="form-label">Cash</label>
+                                    <input type="number" class="form-control" id="cash" name="cash" value="{{booking.cash}}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="online" class="form-label">Online</label>
+                                    <input type="number" class="form-control" id="online" name="online" value="{{booking.online}}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="utr" class="form-label">UTR Number</label>
+                                    <input type="text" class="form-control" id="utr" name="utr" value="{{booking.utr}}"
+                                        placeholder="Eg. 4585568168323">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="transaction_id" class="form-label">Transaction ID</label>
+                                    <input type="text" class="form-control" id="transaction_id" name="transaction_id" value="{{booking.transaction_id}}"
+                                        placeholder="Eg. T456548615318768546">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="balance_amount" class="form-label">Balance Amount</label>
+                                    <input type="number" class="form-control" id="balance_amount" name="balance_amount" value="{{booking.balance_amount}}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="to_pay_amount" class="form-label">To Pay Amount</label>
+                                    <input type="number" class="form-control" id="to_pay_amount" name="to_pay_amount" value="{{booking.to_pay_amount}}"
+                                        onchange="findSubTotal()">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="commission" class="form-label">Commission</label>
+                                    <input type="number" class="form-control" id="commission" name="commission" value="{{booking.commission}}"
+                                        onchange="findSubTotal()">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="local" class="form-label">Local</label>
+                                    <input type="number" class="form-control" id="local" name="local" value="{{booking.local}}"
+                                        onchange="findSubTotal()">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="hamali" class="form-label">Hamali</label>
+                                    <input type="number" class="form-control" id="hamali" name="hamali" value="{{booking.hamali}}"
+                                        onchange="findSubTotal()">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="st_charges" class="form-label">Service Tax Charges</label>
+                                    <input type="number" class="form-control" id="st_charges" name="st_charges" value="{{booking.st_charges}}"
+                                        onchange="findSubTotal()">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="tds" class="form-label">TDS</label>
+                                    <input type="number" class="form-control" id="tds" name="tds" value="{{booking.tds}}"
+                                        onchange="findSubTotal()">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="other_charges" class="form-label">Other Charges</label>
+                                    <input type="number" class="form-control" id="other_charges" name="other_charges" value="{{booking.other_charges}}"
+                                        onchange="[findSubTotal(), findTotalPendiAmount()]">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="remark" class="form-label">Remark</label>
+                                    <input type="text" class="form-control" id="remark" name="remark" value="{{booking.remark}}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="sub_total" class="form-label">Sub Total</label>
+                                    <input type="number" class="form-control" id="sub_total" name="sub_total" value="{{booking.sub_total}}"
+                                        onchange="findTotalPendiAmount()">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="previous_amount" class="form-label">Previous Amount</label>
+                                    <input type="number" class="form-control" id="previous_amount" value="{{booking.previous_amount}}"
+                                        name="previous_amount" onchange="findTotalPendiAmount()">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="pending_amount" class="form-label">Pending Amount</label>
+                                    <input type="number" class="form-control" id="pending_amount" name="pending_amount" value="{{booking.pending_amount}}">
+                                </div>
+
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary">Add Booking</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+
+    // This is not working
+    function findBalance() {
+        var total_hire = parseFloat(document.getElementById("total_hire").value) || 0;
+        var advance_amount = parseFloat(document.getElementById("advance_amount").value) || 0;
+        var balance_amount = total_hire - advance_amount;
+        document.getElementById("balance_amount").value = balance_amount;
+    }
+
+    function findSubTotal() {
+        var total_hire = parseFloat(document.getElementById("total_hire").value) || 0;
+        var advance_amount = parseFloat(document.getElementById("advance_amount").value) || 0;
+        var commission = parseFloat(document.getElementById("commission").value) || 0;
+        var local = parseFloat(document.getElementById("local").value) || 0;
+        var hamali = parseFloat(document.getElementById("hamali").value) || 0;
+        var st_charges = parseFloat(document.getElementById("st_charges").value) || 0;
+        var tds = parseFloat(document.getElementById("tds").value) || 0;
+        var other_charges = parseFloat(document.getElementById("other_charges").value) || 0;
+
+        var sub_total = total_hire + commission + local + hamali + st_charges + tds + other_charges - advance_amount;
+        console.log("total_hire value:", document.getElementById("total_hire"));
+
+
+        document.getElementById("sub_total").value = sub_total; // Optional: round to 2 decimals
+    }
+
+
+    function findVehicle() {
+        var vehicle_type_id = document.getElementById("vehicle_type").value;
+        $.ajax({ "url": "/get_all_vehicle/?id=" + vehicle_type_id }).done(
+            function (result) {
+
+                // console.log(result.citys);
+
+                var vehicles = result.vehicles;
+                var row = '';
+                for (var i = 0; i < vehicles.length; i++) {
+                    row = row + '<option value="' + vehicles[i].id + '">' + vehicles[i].vehicle_number + '</option>';
+                }
+                print(row)
+                // console.log(row);
+                document.getElementById('vehicle_box').innerHTML = row;
+            }
+        );
+    }
+
+    function findPendigAmount() {
+        var party_id = document.getElementById('party').value;
+        $.ajax({
+
+            url: "/get_previous_amount/?id=" + party_id
+        }).done(function (result) {
+            var previous_amount = result.party.pending_amount || 0;
+            document.getElementById('previous_amount').value = previous_amount;
+            // console.log(result.owner);
+            console.log(result);
+        });
+    }
+
+    function findTotalPendiAmount() {
+        var sub_total = parseInt(document.getElementById('sub_total').value) || 0;
+        var previous_amount = parseInt(document.getElementById('previous_amount').value) || 0;
+        var pending_amount = sub_total + previous_amount;
+        document.getElementById('pending_amount').value = pending_amount;
+    }
+
+</script>
+{% include 'footer.html' %}

@@ -1,0 +1,85 @@
+{% include "header.html" %}
+<div class="body-wrapper-inner">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h4 class="card-title mb-4 text-center">Edit Party</h4>
+            <form action="/save_edited_party/" method="post">
+              {% csrf_token %}
+
+              <!-- Hidden ID Input -->
+                <input type="hidden" name="party_id" value="{{party.id}}">
+
+              {% if messages %}
+              {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+              {% endfor %}
+              {% endif %}
+
+
+              <!-- Name -->
+              <div class="mb-3">
+                <label for="party_name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="party_name" name="party_name" value="{{party.party_name}}"
+                  placeholder="Enter your name">
+              </div>
+
+              <!-- Email -->
+              <div class="mb-3">
+                <label for="party_email" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="party_email" name="party_email" value="{{party.party_email}}"
+                  placeholder="Enter your email">
+              </div>
+
+              <!-- Mobile -->
+              <div class="mb-3">
+                <label for="party_mobile" class="form-label">Mobile Number</label>
+                <input type="text" class="form-control" id="party_mobile" name="party_mobile" value="{{party.party_mobile}}"
+                  placeholder="Enter your mobile number">
+              </div>
+
+              <!-- Address -->
+              <div class="mb-3">
+                <label for="party_address" class="form-label">Address</label>
+                <input type="text" class="form-control" id="party_address" name="party_address" value="{{party.party_address}}"
+                  placeholder="Enter your mobile number">
+              </div>
+
+              <!-- City -->
+              <div class="mb-3">
+                <label for="party_city" class="form-label">Party City</label>
+                <input type="text" class="form-control" id="party_city" name="party_city" value="{{party.party_city}}"
+                  placeholder="Enter your mobile number">
+              </div>
+
+              <!-- GST Number -->
+              <div class="mb-3">
+                <label for="party_gst_number" class="form-label">Gst Number</label>
+                <input type="text" class="form-control" id="party_gst_number" name="party_gst_number" value="{{party.party_gst_number}}"
+                  placeholder="Enter your GST Number">
+              </div>
+
+              <!-- Pending Amount -->
+              <div class="mb-3">
+                <label for="party_pending_amt" class="form-label">Pending Amount</label>
+                <input type="number" class="form-control" id="party_pending_amt" name="party_pending_amt" value="{{party.party_pending_amt}}"
+                  placeholder="Enter the Pending Amount">
+              </div>
+
+              <!-- Button -->
+              <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-primary">Save Edited Party</button>
+              </div>
+            </form>
+
+
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+{% include 'footer.html' %}

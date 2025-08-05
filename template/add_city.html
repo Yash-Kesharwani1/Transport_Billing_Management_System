@@ -1,0 +1,97 @@
+{% include "header.html" %}
+<div class="body-wrapper-inner">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+
+            <!-- State -->
+            <!-- 
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4 text-center">Add State</h4>
+                        <form action="/save_state/" method="post">
+                            {% csrf_token %}
+
+                            # State
+                            <div class="mb-3">
+                                <label for="state_name" class="form-label">State</label>
+                                <input type="text" class="form-control" id="state_name" name="state_name"
+                                    placeholder="Enter the name of State">
+                            </div>
+
+                            #Button
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary">Add State</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+             -->
+
+            <!--  -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4 text-center">Add City</h4>
+                        <form action="/save_city/" method="post">
+                            {% csrf_token %}
+
+                            <!-- City -->
+                            <div class="mb-3">
+                                <label for="city_name" class="form-label">City Name</label>
+                                <input type="text" class="form-control" id="city_name" name="city_name"
+                                    placeholder="Enter the name of City">
+                            </div>
+
+                            <!-- State -->
+                            <div class="mb-3">
+                                <label for="state" class="form-label">Vehicle Type</label>
+                                <select class="form-control" id="state" name="state" required>
+                                    <option value="" selected disabled>Select State</option>
+                                    {% for state in states %}
+                                    <option value="{{state.id}}">{{state.state_name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Button -->
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary">Add City</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="mt-5 text-center">Owner Details Table</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered mt-3">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Action</th>
+                            <th>Sr. No.</th>
+                            <th>City</th>
+                            <th>State</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for city in citys %}
+                        <tr>
+                            <td>
+                                <a href="#"><button class="btn">Edit</button></a>
+                                <a href="#"><button class="btn">Delete</button></a>
+                            </td>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{ city.city_name}}</td>
+                            <td>{{ city.state.state_name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}

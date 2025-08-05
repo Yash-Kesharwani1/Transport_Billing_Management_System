@@ -1,0 +1,59 @@
+{% include "header.html" %}
+<div class="body-wrapper-inner">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4 text-center">Add vehicle</h4>
+                        <form action="/save_edited_vehicle/" method="post">
+                            {% csrf_token %}
+
+                            <!-- This is for Hidden vehicle id -->
+                            <input type="hidden" name="vehicle_id" value="{{vehicle.id}}">
+                            <!-- Username -->
+
+                            <div class="mb-3">
+                                <label for="owner_name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="owner_name" name="owner_name"
+                                    value="{{vehicle.owner.owner_name}}" placeholder="Enter your name">
+                            </div>
+
+                            <!-- Mobile -->
+                            <div class="mb-3">
+                                <label for="owner_mobile" class="form-label">Mobile Number</label>
+                                <input type="text" class="form-control" id="owner_mobile" name="owner_mobile"
+                                    value="{{vehicle.owner.owner_mobile}}" placeholder="Enter your mobile number">
+                            </div>
+
+                            <!-- Vehicle Number -->
+                            <div class="mb-3">
+                                <label for="vehicle_number" class="form-label">Vehicle Number</label>
+                                <input type="text" class="form-control" id="vehicle_number" name="vehicle_number"
+                                    value="{{vehicle.vehicle_number}}" placeholder="Enter your mobile number">
+                            </div>
+
+                            <!-- Vehicle Type -->
+                            <div class="mb-3">
+                                <label for="vehicle_type" class="form-label">Vehicle Type</label>
+                                <select class="form-control" name="vehicle_type" id="vehicle_type">
+                                    <option value="" disabled selected>Select Vehicle Type</option>
+                                    {% for vehicle_type in vehicle_types %}
+                                    <option value="{{vehicle_type.id}}">{{vehicle_type.vehicle_type}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Button -->
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary">Edit Vehicle Info</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}

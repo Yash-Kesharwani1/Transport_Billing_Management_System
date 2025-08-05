@@ -1,0 +1,92 @@
+{% include "header.html" %}
+<div class="body-wrapper-inner">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4 text-center">Add Owner</h4>
+                        <form action="/save_owner/" method="post">
+                            {% csrf_token %}
+
+                            {% if messages %}
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                            {% endif %}
+
+                            <!-- Username -->
+                            <div class="mb-3">
+                                <label for="owner_name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="owner_name" name="owner_name"
+                                    placeholder="Enter your Name">
+                            </div>
+
+                            <!-- Mobile -->
+                            <div class="mb-3">
+                                <label for="owner_mobile" class="form-label">Mobile Number</label>
+                                <input type="text" class="form-control" id="owner_mobile" name="owner_mobile"
+                                    placeholder="Enter your mobile number">
+                            </div>
+
+                            <!-- Owner Type -->
+                            <div class="mb-3">
+                                <label for="owner_type" class="form-label">Vehicle Type</label>
+                                <select class="form-control" name="owner_type" id="owner_type">
+                                    <option value="" disabled selected>Select Vehicle Type</option>
+                                    <option value="Vendor">Vendor</option>
+                                    <option value="Owner">Owner</option>
+                                </select>
+                            </div>
+
+
+
+                            <!-- Address -->
+                            <div class="mb-3">
+                                <label for="owner_address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="owner_address" name="owner_address"
+                                    placeholder="Enter your Address">
+                            </div>
+
+                            <!-- Button -->
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary">Add Owner</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <h4 class="mt-5 text-center">Owner Details Table</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered mt-3">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Action</th>
+                            <th>Sr. No.</th>
+                            <th>Name</th>
+                            <th>Mobile</th>
+                            <th>Address</th>
+                            <th>Ownwer Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for owner in owners %}
+                        <tr>
+                            <td>
+                                <a href="/edit_owner/?id={{owner.id}}"><button class="btn">Edit</button></a>
+                                <a href="/delete_owner/?id={{owner.id}}"><button class="btn">Delete</button></a>
+                            </td>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{ owner.owner_name}}</td>
+                            <td>{{ owner.owner_mobile }}</td>
+                            <td>{{ owner.owner_type }}</td>
+                            <td>{{ owner.owner_address }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}

@@ -1,0 +1,55 @@
+{% include "header.html" %}
+<div class="body-wrapper-inner">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      
+      <h4 class="mt-5 text-center">Party Details Table</h4>
+      <button onclick="printTable()" class="btn">Print Table</button>
+      <div class="table-responsive">
+        <table class="table table-bordered mt-3" id="partyTable">
+          <thead class="table-light">
+            <tr>
+              <th>Sr. No.</th>
+              <th>Vehicle Number</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Address</th>
+              <th>Type</th>
+              <th>Vehicle Type</th>
+              <th>Balance Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for send in sends %}
+            <tr>
+              <td>{{forloop.counter}}</td>
+              <td>{{ send.vehicle_number }}</td>
+              <td>{{ send.owner.owner_first_name }}</td>
+              <td>{{ send.owner.owner_last_name }}</td>
+              <td>{{ send.owner.owner_address }}</td>
+              <td>{{ send.owner.owner_type }}</td>
+              <td>{{ send.vehicle_type }}</td>
+              <td>{{ send.balance_amount }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function printTable() {
+    let printContent = document.getElementById("partyTable").outerHTML;
+    let win = window.open("", "", "height=700,width=700");
+    win.document.write("<html><head><title>Print Table</title></head><body>");
+    win.document.write(printContent);
+    win.document.write("</body></html>");
+    win.document.close();
+    win.print();
+  }
+</script>
+
+{% include 'footer.html' %}

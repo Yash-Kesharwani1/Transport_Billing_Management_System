@@ -1,0 +1,129 @@
+{% include "header.html" %}
+<div class="body-wrapper-inner">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h4 class="card-title mb-4 text-center">Add Party</h4>
+            <form action="/save_party/" method="post">
+              {% csrf_token %}
+
+              {% if messages %}
+              {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+              {% endfor %}
+              {% endif %}
+
+              <!-- Name -->
+              <div class="mb-3">
+                <label for="party_name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="party_name" name="party_name" placeholder="Enter your name">
+              </div>
+
+              <!-- Email -->
+              <div class="mb-3">
+                <label for="party_email" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="party_email" name="party_email"
+                  placeholder="Enter your email">
+              </div>
+
+              <!-- Mobile -->
+              <div class="mb-3">
+                <label for="party_mobile" class="form-label">Mobile Number</label>
+                <input type="text" class="form-control" id="party_mobile" name="party_mobile"
+                  placeholder="Enter your mobile number">
+              </div>
+
+              <!-- Address -->
+              <div class="mb-3">
+                <label for="party_address" class="form-label">Address</label>
+                <input type="text" class="form-control" id="party_address" name="party_address"
+                  placeholder="Enter your Address">
+              </div>
+
+              <!-- City -->
+              <div class="mb-3">
+                <label for="party_city" class="form-label">Party City</label>
+                <input type="text" class="form-control" id="party_city" name="party_city" placeholder="Enter your City">
+              </div>
+
+              <!-- GST Number -->
+              <div class="mb-3">
+                <label for="party_gst_number" class="form-label">Gst Number</label>
+                <input type="text" class="form-control" id="party_gst_number" name="party_gst_number"
+                  placeholder="Enter your gst number">
+              </div>
+
+              <!-- Pending Amount -->
+              <div class="mb-3">
+                <label for="party_pending_amt" class="form-label">Pending Amount</label>
+                <input type="number" class="form-control" id="party_pending_amt" name="party_pending_amt"
+                  placeholder="Enter the Pending Amount">
+              </div>
+
+              <!-- Button -->
+              <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-primary">Add Party</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <h4 class="mt-5 text-center">Party Details Table</h4>
+      <button onclick="printTable()" class="btn">Print Table</button>
+      <a href="{% url 'download_party_excel' %}" class="btn btn-success">Download Excel</a>
+
+      <div class="table-responsive">
+        <table class="table table-bordered mt-3" id="partyTable">
+          <thead class="table-light">
+            <tr>
+              <th>Action</th>
+              <th>Sr. No.</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Mobile</th>
+              <th>Address</th>
+              <th>City</th>
+              <th>GST Number</th>
+              <th>Pending Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for party in partys %}
+            <tr>
+              <td>
+                <a href="/edit_party/?id={{party.id}}"><button class="btn">Edit</button></a>
+                <a href="/delete_party/?id={{party.id}}"><button class="btn">Delete</button></a>
+              </td>
+              <td>{{forloop.counter}}</td>
+              <td>{{ party.party_name }}</td>
+              <td>{{ party.party_email }}</td>
+              <td>{{ party.party_mobile }}</td>
+              <td>{{ party.party_address }}</td>
+              <td>{{ party.party_city }}</td>
+              <td>{{ party.party_gst_number }}</td>
+              <td>{{ party.party_pending_amt }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function printTable() {
+    let printContent = document.getElementById("partyTable").outerHTML;
+    let win = window.open("", "", "height=700,width=700");
+    win.document.write("<html><head><title>Print Table</title></head><body>");
+    win.document.write(printContent);
+    win.document.write("</body></html>");
+    win.document.close();
+    win.print();
+  }
+</script>
+
+{% include 'footer.html' %}

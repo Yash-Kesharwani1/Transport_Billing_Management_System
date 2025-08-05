@@ -1,0 +1,51 @@
+{% include "header.html" %}
+<div class="body-wrapper-inner">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      
+      <h4 class="mt-5 text-center">Party Details Table</h4>
+      <button onclick="printTable()" class="btn">Print Table</button>
+      <div class="table-responsive">
+        <table class="table table-bordered mt-3" id="partyTable">
+          <thead class="table-light">
+            <tr>
+              <th>Sr. No.</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Mobile</th>
+              <th>Address</th>
+              <th>Pending Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for pending in pendings %}
+            <tr>
+              <td>{{forloop.counter}}</td>
+              <td>{{ pending.party_name }}</td>
+              <td>{{ pending.party_email }}</td>
+              <td>{{ pending.party_mobile }}</td>
+              <td>{{ pending.party_address }}</td>
+              <td>{{ pending.party_pending_amt }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function printTable() {
+    let printContent = document.getElementById("partyTable").outerHTML;
+    let win = window.open("", "", "height=700,width=700");
+    win.document.write("<html><head><title>Print Table</title></head><body>");
+    win.document.write(printContent);
+    win.document.write("</body></html>");
+    win.document.close();
+    win.print();
+  }
+</script>
+
+{% include 'footer.html' %}

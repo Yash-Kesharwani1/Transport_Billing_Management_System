@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Booking Print - {{ booking.booking_number }}</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        h2 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #333; padding: 8px; text-align: left; }
+        .section { margin-bottom: 30px; }
+        @media print {
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <h2>Booking Details - {{ booking.booking_number }}</h2>
+
+    <div class="section">
+        <strong>Date:</strong> {{ booking.booking_date }}<br>
+        <strong>Party Name:</strong> {{ booking.party.party_name }}<br>
+        <strong>Vehicle:</strong> {{ booking.vehicle.vehicle_number }}<br>
+        <strong>From:</strong> {{ booking.from_city }} → <strong>To:</strong> {{ booking.to_city }}
+    </div>
+
+    <table>
+        <tr><th>Field</th><th>Value</th></tr>
+        <tr><td>Total Hire</td><td>₹{{ booking.total_hire }}</td></tr>
+        <tr><td>Advance</td><td>₹{{ booking.advance_amount }}</td></tr>
+        <tr><td>Balance</td><td>₹{{ booking.balance_amount }}</td></tr>
+        <tr><td>To Pay</td><td>₹{{ booking.to_pay_amount }}</td></tr>
+        <tr><td>Commission</td><td>₹{{ booking.commission }}</td></tr>
+        <tr><td>Local</td><td>₹{{ booking.local }}</td></tr>
+        <tr><td>Hamali</td><td>₹{{ booking.hamali }}</td></tr>
+        <tr><td>Service Tax</td><td>₹{{ booking.st_charges }}</td></tr>
+        <tr><td>TDS</td><td>₹{{ booking.tds }}</td></tr>
+        <tr><td>Other Charges</td><td>₹{{ booking.other_charges }}</td></tr>
+        <tr><td>Cash</td><td>₹{{ booking.cash }}</td></tr>
+        <tr><td>Online</td><td>₹{{ booking.online }}</td></tr>
+        <tr><td>UTR</td><td>{{ booking.utr }}</td></tr>
+        <tr><td>Transaction ID</td><td>{{ booking.transaction_id }}</td></tr>
+        <tr><td>Sub Total</td><td>₹{{ booking.sub_total }}</td></tr>
+        <tr><td>Previous Amount</td><td>₹{{ booking.previous_amount }}</td></tr>
+        <tr><td>Pending Amount</td><td>₹{{ booking.pending_amount }}</td></tr>
+        <tr><td>Remark</td><td>{{ booking.remark }}</td></tr>
+    </table>
+
+    <div class="no-print" style="text-align: center; margin-top: 30px;">
+        <button onclick="window.print()">🖨️ Print</button>
+        <a href="{% url 'booking_list' %}">Back to Booking List</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+{% include "header.html" %}
+<div class="body-wrapper-inner">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4 text-center">Add Owner</h4>
+                        <form action="/save_edited_owner/" method="post">
+                            {% csrf_token %}
+
+                            {% if messages %}
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                            {% endif %}
+
+                            <input type="hidden" name="owner_id" value="{{owner.id}}">
+
+                            <!-- First Name -->
+                            <div class="mb-3">
+                                <label for="owner_name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="owner_name" name="owner_name"
+                                    value="{{owner.owner_name}}" placeholder="Enter your first name">
+                            </div>
+
+                            <!-- Mobile -->
+                            <div class="mb-3">
+                                <label for="owner_mobile" class="form-label">Mobile Number</label>
+                                <input type="text" class="form-control" id="owner_mobile" name="owner_mobile"
+                                    value="{{owner.owner_mobile}}" placeholder="Enter your mobile number">
+                            </div>
+
+                            <!-- Owner Type -->
+                            <div class="mb-3">
+                                <label for="owner_type" class="form-label">Owner Type</label>
+                                <input type="text" class="form-control" id="owner_type" name="owner_type"
+                                    value="{{owner.owner_type}}" placeholder="Enter your Owner type">
+                            </div>
+
+                            <!-- Address -->
+                            <div class="mb-3">
+                                <label for="owner_address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="owner_address" name="owner_address"
+                                    value="{{owner.owner_address}}" placeholder="Enter your Address">
+                            </div>
+
+                            <!-- Button -->
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary">Add Owner</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
