@@ -76,6 +76,8 @@ urlpatterns = [
     # PAYMENT RECIVED
     path('payment_recived/', wb.payment_recived, name='payment_recived'),
     path('save_payment_recived/', wb.save_payment_recived, name='save_payment_recived'),
+    path('edit_payment_recived/', wb.edit_payment_recived, name='edit_payment_recived'),
+    path('save_edited_payment_recived/', wb.save_edited_payment_recived, name='save_edited_payment_recived'),
     path('delete_payment_recived/',wb.delete_payment_recived, name='delete_payment_recived'),
 
     # PAYMENT SENT

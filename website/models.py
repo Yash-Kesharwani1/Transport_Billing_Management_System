@@ -108,6 +108,9 @@ class DeletedParty(models.Model):
 
 
 class Booking(models.Model):
+    
+    booking_number = models.CharField()
+
     booking_date = models.DateField(auto_now_add=True)
     party = models.ForeignKey('Party', on_delete=models.CASCADE)
     vehicle_type = models.ForeignKey('VehicleType', on_delete=models.CASCADE, blank=True)
@@ -142,6 +145,8 @@ class Booking(models.Model):
 
 class DeletedBooking(models.Model):
     
+    booking_number = models.CharField()
+
     booking_date = models.DateField(auto_now_add=True)
     party = models.ForeignKey('Party', on_delete=models.CASCADE)
     vehicle = models.ForeignKey('Vehicle', on_delete=models.CASCADE)
@@ -186,6 +191,8 @@ class DeletedBooking(models.Model):
 
 
 class PaymentRecived(models.Model):
+
+    booking_number = models.CharField()
     
     party = models.ForeignKey('Party', on_delete=models.CASCADE)
     cash = models.IntegerField(default=0)
@@ -199,6 +206,8 @@ class PaymentRecived(models.Model):
 
 class DeletedPaymentRecived(models.Model):
     
+    booking_number = models.CharField()
+
     party = models.ForeignKey('Party', on_delete=models.CASCADE)
     cash = models.IntegerField(default=0)
     online = models.IntegerField(default=0)

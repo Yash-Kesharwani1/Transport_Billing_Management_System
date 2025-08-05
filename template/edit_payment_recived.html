@@ -1,0 +1,127 @@
+{% include "header.html" %}
+<div class="body-wrapper-inner">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-9">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4 text-center">Edit Payment Recived</h4>
+                        <form action="/save_edited_payment_recived/" method="post">
+                            {% csrf_token %}
+                            <div class="row">
+
+                                <input type="hidden" name="payment_recived_id" value="{{payment_recived.id}}">
+
+                                <!-- Booking Number -->
+                                <div class="col-md-6 mb-3">
+                                     <label for="booking_number" class="form-label">Booking Number</label>
+                                     <input type="text" class="form-control" id="booking_number" name="booking_number" value="{{payment_recived.booking_number}}">
+                                </div>
+
+
+                                <!-- Booking Date -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="date" class="form-label">Payment Recived Date</label>
+                                    <input type="date" class="form-control" id="date" name="date" value="{{payment_recived.booking_date}}">
+                                </div>
+
+                                <!-- Party -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="party" class="form-label">Select Party</label>
+                                    <select name="party" id="party" class="form-control" onchange="[findPendigAmount(), findTotalPendigAmount()]">
+                                        <option value="{{payment_recived.party.id}}" disabled selected>{{payment_recived.party.party_name}}</option>
+                                        {% for party in partys %}
+                                        <option value="{{party.id}}">{{party.party_name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <!-- Cash -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="cash" class="form-label">Cash</label>
+                                    <input type="number" class="form-control" id="cash" name="cash" onchange="[findTotal(),findTotalPendigAmount()]" value="{{payment_recived.cash}}">
+                                </div>
+
+                                <!-- Online -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="online" class="form-label">Online</label>
+                                    <input type="number" class="form-control" id="online" name="online" onchange="[findTotal(),findTotalPendigAmount()]" value="{{payment_recived.online}}">
+                                </div>
+
+                                <!-- UTR Number -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="utr" class="form-label">UTR Number</label>
+                                    <input type="text" class="form-control" id="utr" name="utr"
+                                        placeholder="Eg. 4585568168323" value="{{payment_recived.utr}}">
+                                </div>
+
+                                <!-- Transaction ID -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="transaction_id" class="form-label">Transaction ID</label>
+                                    <input type="text" class="form-control" id="transaction_id" name="transaction_id"
+                                        placeholder="Eg. T456548615318768546" value="{{payment_recived.transaction_id}}">
+                                </div>
+
+                                <!-- Total -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="total" class="form-label">Total</label>
+                                    <input type="number" class="form-control" id="total" name="total">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="previous_amount" class="form-label">Previous Amount</label>
+                                    <input type="number" class="form-control" id="previous_amount"
+                                        name="previous_amount" onchange="findTotalPendigAmount()" value="{{payment_recived.previous_amount}}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="pending_amount" class="form-label">Pending Amount</label>
+                                    <input type="number" class="form-control" id="pending_amount" name="pending_amount" value="{{payment_recived.pending_amount}}">
+                                </div>
+
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary">Save Payment Recived</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    // Find Total
+    function findTotal(){
+        var cash = parseFloat(document.getElementById('cash').value) || 0;
+        var online = parseFloat(document.getElementById('online').value) || 0;
+        var total = cash + online;
+        document.getElementById('total').value = total;
+    }
+
+    function findPendigAmount() {
+        var party_id = document.getElementById('party').value;
+        $.ajax({
+
+            url: "/get_previous_amount/?id=" + party_id
+        }).done(function (result) {
+            var previous_amount = result.party.pending_amount || 0;
+            document.getElementById('previous_amount').value = previous_amount;
+            // console.log(result.owner);
+            console.log(result);
+        });
+    }
+
+    function findTotalPendigAmount() {
+        var total = parseInt(document.getElementById('total').value) || 0;
+        var previous_amount = parseInt(document.getElementById('previous_amount').value) || 0;
+        var pending_amount = previous_amount - total;
+        document.getElementById('pending_amount').value = pending_amount;
+    }
+
+</script>
+{% include 'footer.html' %}

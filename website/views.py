@@ -428,6 +428,8 @@ def save_booking(req):
 
     booking = models.Booking(
 
+        booking_number=req.POST['booking_number'],
+
         booking_date=req.POST['booking_date'],
         party=models.Party.objects.get(id=req.POST['party']),
         vehicle_type=models.VehicleType.objects.get(
@@ -529,6 +531,9 @@ def edit_booking(req):
 
 
 def save_edited_booking(req):
+
+    booking_number=req.POST['booking_number'],
+
     booking_id = req.POST['booking_id']
     booking = models.Booking.objects.get(id=booking_id)
     booking.booking_date = req.POST['booking_date']
@@ -731,6 +736,55 @@ def save_payment_recived(req):
     return redirect('/payment_recived/')
 
 
+
+def edit_payment_recived(req):
+    payment_recived = models.PaymentRecived.objects.get(id=req.GET['id'])
+
+    partys = models.Party.objects.all()
+
+
+    # Getting Previous Party using payment_recived
+    previous_party = payment_recived.party
+
+    # Getting Previous Amount using payment_recived
+    previous_amount = payment_recived.previous_amount
+
+    print(previous_amount)
+
+    previous_party.party_pending_amt = previous_amount
+
+    previous_party.save()
+
+    return render(req,'edit_payment_recived.html', {'payment_recived':payment_recived, 'partys':partys})
+
+
+
+def save_edited_payment_recived(req):
+
+    payment_recived = models.PaymentRecived.objects.get(id=req.POST['payment_recived_id'])
+
+    print(req.POST['party'])
+
+    payment_recived.booking_number=req.POST['booking_number']
+    payment_recived.party=models.Party.objects.get(id=req.POST['party'])
+    payment_recived.cash=req.POST['cash']
+    payment_recived.online=req.POST['online']
+    payment_recived.transaction_id=req.POST['transaction_id']
+    payment_recived.utr=req.POST['utr']
+    payment_recived.total=req.POST['total']
+    payment_recived.previous_amount=req.POST['previous_amount']
+    payment_recived.pending_amount=req.POST['pending_amount']
+    payment_recived.date=req.POST['date']
+
+    payment_recived.save()
+
+    party = models.Party.objects.get(id=req.POST['party'])
+    party.party_pending_amt = req.POST['pending_amount']
+    party.save()
+
+    return redirect('/payment_recived/')
+
+
 def delete_payment_recived(req):
     if 'user_login_id' in req.session:
         payment_recived = models.PaymentRecived.objects.get(id=req.GET['id'])
@@ -794,6 +848,8 @@ def save_payment_sent(req):
     return redirect('/payment_sent/')
 
 
+
+
 def delete_payment_sent(req):
 
     if 'user_login_id' in req.session:
@@ -810,6 +866,8 @@ def delete_payment_sent(req):
     else:
         return redirect('/login/')
 
+
+##############################################################################################################################################################################################################################
 
 def alert_payment_pending_by_party(req):
 

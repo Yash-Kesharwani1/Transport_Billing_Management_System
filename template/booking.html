@@ -9,6 +9,13 @@
                         <form action="/save_booking/" method="post">
                             {% csrf_token %}
                             <div class="row">
+
+                                <!-- Booking Number -->
+                                <div class="col-md-6 mb-3">
+                                    <label for="booking_number" class="form-label">Booking Number</label>
+                                    <input type="text" name="booking_number" id="booking_number" class="form-control">
+                                </div>
+
                                 <!-- Booking Date -->
                                 <div class="col-md-6 mb-3">
                                     <label for="booking_date" class="form-label">Booking Date</label>
