@@ -1,0 +1,48 @@
+{% include "header.html" %}
+<div class="body-wrapper-inner">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <h4 class="mt-5 text-center">Booking Details Table</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered mt-3">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Action</th>
+                            <th>Sr. No.</th>
+                            <th>Booking Number</th>
+                            <th>Booking Date</th>
+                            <th>Party</th>
+                            <th>Vehicle</th>
+                            <th>From City</th>
+                            <th>To City</th>
+                            <th>Sub-Total</th>
+                            <th>Pending Amount</th>
+                            <th>Balance Amount to Pay to Vehicle Owner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in bookings %}
+                        <tr>
+                            <td>
+                                <a href="/edit_booking/?id={{booking.id}}"><button class="btn">Edit</button></a>
+                                <a href="/delete_booking/?id={{booking.id}}"><button class="btn">Delete</button></a>
+                            </td>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{ booking.booking_number }}</td>
+                            <td>{{ booking.booking_date }}</td>
+                            <td>{{ booking.party }}</td>
+                            <td>{{ booking.vehicle }}</td>
+                            <td>{{ booking.from_city }}</td>
+                            <td>{{ booking.to_city }}</td>
+                            <td>{{ booking.sub_total }}</td>
+                            <td>{{ booking.pending_amount }}</td>
+                            <td>{{ booking.balance_amount_to_pay_to_vehicle }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}

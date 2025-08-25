@@ -1,0 +1,39 @@
+{% include "header.html" %}
+<div class="body-wrapper-inner">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <h4 class="mt-5 text-center">Owner Details Table</h4>
+      <div class="table-responsive">
+        <table class="table table-bordered mt-3">
+          <thead class="table-light">
+            <tr>
+              <th>Action</th>
+              <th>Sr. No.</th>
+              <th>Vehicle Number</th>
+              <th>Vehicle Owner</th>
+              <th>Vehicle Type</th>
+              <th>Balance Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for vehicle in vehicles %}
+            <tr>
+              <td>
+                <a href="/edit_vehicle/?id={{vehicle.id}}"><button class="btn">Edit</button></a>
+                <a href="/delete_vehicle/?id={{vehicle.id}}"><button class="btn">Delete</button></a>
+              </td>
+              <td>{{forloop.counter}}</td>
+              <td>{{ vehicle.vehicle_number}}</td>
+              <td>{{ vehicle.owner.owner_name }}</td>
+              <td>{{ vehicle.vehicle_type }}</td>
+              <td>{{ vehicle.balance_amount }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% include 'footer.html' %}

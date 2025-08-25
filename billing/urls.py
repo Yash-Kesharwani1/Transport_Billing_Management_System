@@ -32,6 +32,7 @@ urlpatterns = [
 
     # PARTY
     path('party/', wb.party, name='party'),
+    path('show_party/', wb.show_party, name='show_party'),
     path('save_party/', wb.save_party, name='save_party'),
     path('edit_party/', wb.edit_party, name='edit_party'),
     path('save_edited_party/', wb.save_edited_party, name='save_edited_party'),
@@ -39,6 +40,7 @@ urlpatterns = [
 
     # OWNER
     path('owner/', wb.owner, name='owner'),
+    path('show_owner/', wb.show_owner, name='show_owner'),
     path('save_owner/', wb.save_owner, name='save_owner'),
     path('edit_owner/', wb.edit_owner, name='edit_owner'),
     path('save_edited_owner/', wb.save_edited_owner, name='save_edited_owner'),
@@ -46,6 +48,7 @@ urlpatterns = [
 
     # VEHICLE
     path('vehicle/', wb.vehicle, name='vehicle'),
+    path('show_vehicle/', wb.show_vehicle, name='show_vehicle'),
     path('save_vehicle_type/', wb.save_vehicle_type, name='save_vehicle_type'),
     path('save_vehicle/', wb.save_vehicle, name='save_vehicle'),
     path('edit_vehicle/', wb.edit_vehicle, name='edit_vehicle'),
@@ -55,11 +58,11 @@ urlpatterns = [
 
     # BOOKING
     path('booking/', wb.booking, name='booking'),
+    path('show_booking/', wb.show_booking, name='show_booking'),
     path('save_booking/', wb.save_booking, name='save_booking'),
     path('edit_booking/', wb.edit_booking, name='edit_booking'),
     path('save_edited_booking/', wb.save_edited_booking, name='save_edited_booking'),
     path('delete_booking/', wb.delete_booking, name='delete_booking'),
-
 
     # STATE and CITYS
     path('add_city/', wb.add_city, name='add_city'),
@@ -75,6 +78,7 @@ urlpatterns = [
 
     # PAYMENT RECIVED
     path('payment_recived/', wb.payment_recived, name='payment_recived'),
+    path('show_payment_recived/', wb.show_payment_recived, name='show_payment_recived'),
     path('save_payment_recived/', wb.save_payment_recived, name='save_payment_recived'),
     path('edit_payment_recived/', wb.edit_payment_recived, name='edit_payment_recived'),
     path('save_edited_payment_recived/', wb.save_edited_payment_recived, name='save_edited_payment_recived'),
@@ -82,6 +86,7 @@ urlpatterns = [
 
     # PAYMENT SENT
     path('payment_sent/', wb.payment_sent, name='payment_sent'),
+    path('show_payment_sent/', wb.show_payment_sent, name='show_payment_sent'),
     path('save_payment_sent/', wb.save_payment_sent, name='save_payment_sent'),
     path('edit_payment_sent/', wb.edit_payment_sent, name='edit_payment_sent'),
     path('save_edited_payment_sent/', wb.save_edited_payment_sent, name='save_edited_payment_sent'),

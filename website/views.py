@@ -25,7 +25,14 @@ def is_valid_gst_number(gstin):
 
 def home(req):
     if 'user_login_id' in req.session:
-        return render(req, 'index.html')
+        # total trips
+        total_trips = len(models.Booking.objects.all())
+
+        # active customer
+        active_customer = len(models.Party.objects.all())
+
+        object = {'total_trips':total_trips, 'active_customer':active_customer}
+        return render(req, 'index.html', object)
     else:
         return redirect('/login/')
 
@@ -144,6 +151,14 @@ def save_party(req):
     return redirect('/party/')
 
 
+def show_party(req):
+    if 'user_login_id' in req.session:
+        partys = models.Party.objects.all()
+        return render(req,'show_party.html',{'partys':partys})
+    else:
+        return redirect('/login/')
+
+
 def edit_party(req):
     if 'user_login_id' in req.session:
         # Object Bhejna Hai
@@ -220,6 +235,13 @@ def save_owner(req):
         )
         owner.save()
         return redirect('/owner/')
+    else:
+        return redirect('/login/')
+    
+def show_owner(req):
+    if 'user_login_id' in req.session:
+        owners = models.Owner.objects.all()
+        return render(req,'show_owner.html', {'owners':owners})
     else:
         return redirect('/login/')
 
@@ -315,6 +337,14 @@ def save_vehicle(req):
         messages.error(
             req, f"No owner exists with name {req.POST['owner_name']}")
         return redirect('/vehicle/')
+    
+
+def show_vehicle(req):
+    if 'user_login_id' in req.session:
+        vehicles = models.Vehicle.objects.all()
+        return render(req, 'show_vehicle.html', {'vehicles':vehicles})
+    else:
+        return redirect('/login/')
 
 
 def edit_vehicle(req):
@@ -495,13 +525,21 @@ def save_booking(req):
         transaction_id=req.POST['transaction_id'],
         utr=req.POST['utr'],
         total=req.POST['advance_amount'],
-        previous_amount=req.POST['balance_amount_to_pay_to_vehicle'],
+        previous_amount=req.POST['amount_to_send_vehicle_owner'],
         balance_amount=req.POST['total_balance_amount_to_send_to_vehicle_owner'],
         date=req.POST['booking_date']
     )
     payment_sent.save()
 
     return redirect('/booking/')
+
+
+def show_booking(req):
+    if 'user_login_id' in req.session:
+        bookings = models.Booking.objects.all()
+        return render(req, 'show_booking.html', {'bookings':bookings})
+    else:
+        return redirect('/login/')
 
 
 def edit_booking(req):
@@ -520,10 +558,13 @@ def edit_booking(req):
         states = models.State.objects.all()
 
         booking_id = req.GET['id']
+
         booking = models.Booking.objects.get(id=booking_id)
+
         obj = {
             'partys': partys, 'vehicles': vehicles, 'vehicle_types': vehicle_types, 'states': states, 'booking': booking
         }
+        
         return render(req, "edit_booking.html", obj)
 
     else:
@@ -736,6 +777,12 @@ def save_payment_recived(req):
     return redirect('/payment_recived/')
 
 
+def show_payment_recived(req):
+    if 'user_login_id' in req.session:
+        payment_reciveds = models.PaymentRecived.objects.all()
+        return render(req, 'show_payment_recived.html', {'payment_reciveds':payment_reciveds})
+    else:
+        return redirect('/login/')
 
 def edit_payment_recived(req):
     payment_recived = models.PaymentRecived.objects.get(id=req.GET['id'])
@@ -791,9 +838,26 @@ def delete_payment_recived(req):
 
         party_id = payment_recived.party.id
 
+        # Jiss se paise liye the unko vapas krdo
         party = models.Party.objects.get(id=party_id)
-        party.party_pending_amt = req.POST['pending_amount']
+        party.party_pending_amt = payment_recived.previous_amount
         party.save()
+
+        # Save the Deleting payment_recived
+        deleted_payment_recived = models.DeletedPaymentRecived(
+            booking_number = payment_recived.booking_number,
+            party = payment_recived.party,
+            cash = payment_recived.cash,
+            online = payment_recived.online,
+            transaction_id = payment_recived.transaction_id,
+            utr = payment_recived.utr,
+            total = payment_recived.total,
+            previous_amount = payment_recived.previous_amount,
+            pending_amount = payment_recived.pending_amount,
+            date = payment_recived.date
+        )
+
+        deleted_payment_recived.save()
 
         models.PaymentRecived.objects.get(id=req.GET['id']).delete()
         return redirect('/payment_recived/')
@@ -848,6 +912,13 @@ def save_payment_sent(req):
     return redirect('/payment_sent/')
 
 
+def show_payment_sent(req):
+    if 'user_login_id' in req.session:
+        payment_sents = models.PaymentSent.objects.all()
+        return render(req, 'show_payment_sent.html', {'payment_sents':payment_sents})
+    else:
+        return redirect('/login/')
+
 def edit_payment_sent(req):
     
     payment_sent = models.PaymentSent.objects.get(id=req.GET['id'])
@@ -899,8 +970,26 @@ def delete_payment_sent(req):
         vehicle_id = payment_sent.vehicle.id
 
         vehicle = models.Vehicle.objects.get(id=vehicle_id)
+
+        # JissKO paise bheje the uss se paise vapas lelo
         vehicle.balance_amount = payment_sent.previous_amount
         vehicle.save()
+
+        # Store the deleting payment into DeletedPaymentSent
+        deleted_payment_sent = models.DeletedPaymentSent(
+            booking_number = payment_sent.booking_number,
+            vehicle_type = payment_sent.vehicle_type,
+            vehicle = payment_sent.vehicle,
+            cash = payment_sent.cash,
+            online = payment_sent.online,
+            transaction_id = payment_sent.transaction_id,
+            utr = payment_sent.utr,
+            total = payment_sent.total,
+            previous_amount = payment_sent.previous_amount,
+            balance_amount = payment_sent.balance_amount,
+            date = payment_sent.date
+        )
+        deleted_payment_sent.save()
 
         models.PaymentSent.objects.get(id=req.GET['id']).delete()
         return redirect('/payment_sent/')
@@ -992,3 +1081,4 @@ def payment_sent_view(request):
     payments = PaymentSent.objects.filter(**filters)
 
     return render(request, 'your_template.html', {'payments': payments})
+

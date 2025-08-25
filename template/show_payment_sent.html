@@ -1,0 +1,52 @@
+{% include "header.html" %}
+<div class="body-wrapper-inner">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <h4 class="mt-5 text-center">Payment Send Table</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered mt-3">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Action</th>
+                            <th>Sr. No.</th>
+                            <th>Booking Date</th>
+                            <th>Vehicle Type</th>
+                            <th>Vehicle</th>
+                            <th>Cash</th>
+                            <th>Online</th>
+                            <th>Transaction ID</th>
+                            <th>UTR</th>
+                            <th>Total Amount Sent</th>
+                            <th>Previous Balance Amount to send</th>
+                            <th>Total Balance Amount to send</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for payment_sent in payment_sents %}
+                        <tr>
+                            <td>
+                                <a href="/edit_payment_sent/?id={{payment_sent.id}}"><button
+                                        class="btn">Edit</button></a>
+                                <a href="/delete_payment_sent/?id={{payment_sent.id}}"><button
+                                        class="btn">Delete</button></a>
+                            </td>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{ payment_sent.date }}</td>
+                            <td>{{ payment_sent.vehicle_type }}</td>
+                            <td>{{ payment_sent.vehicle }}</td>
+                            <td>{{ payment_sent.cash }}</td>
+                            <td>{{ payment_sent.online }}</td>
+                            <td>{{ payment_sent.transaction_id }}</td>
+                            <td>{{ payment_sent.utr }}</td>
+                            <td>{{ payment_sent.total }}</td>
+                            <td>{{ payment_sent.previous_amount }}</td>
+                            <td>{{ payment_sent.balance_amount }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}

@@ -1,34 +1,99 @@
 {% include "header.html" %}
-      <div class="body-wrapper-inner">
-        <div class="container-fluid">
-          <!--  Row 1 -->
-          <div class="row">
-            <div class="col-lg-8">
-              <div class="card w-100">
-                <div class="card-body">
-                  <div class="d-md-flex align-items-center">
-                    <div>
-                      <h4 class="card-title">Sales Overview</h4>
-                      <p class="card-subtitle">
-                        Ample admin Vs Pixel admin
-                      </p>
-                    </div>
-                    <div class="ms-auto">
-                      <ul class="list-unstyled mb-0">
-                        <li class="list-inline-item text-primary">
-                          <span class="round-8 text-bg-primary rounded-circle me-1 d-inline-block"></span>
-                          Ample
-                        </li>
-                        <li class="list-inline-item text-info">
-                          <span class="round-8 text-bg-info rounded-circle me-1 d-inline-block"></span>
-                          Pixel Admin
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div id="sales-overview" class="mt-4 mx-n6"></div>
-                </div>
+<div class="body-wrapper-inner">
+  <div class="container-fluid">
+    <!--  Row 1 -->
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card w-100">
+          <div class="card-body">
+            <div class="d-md-flex align-items-center">
+              <div>
+                <h4 class="card-title">Sales Overview</h4>
+                <p class="card-subtitle">Ample admin Vs Pixel admin</p>
+              </div>
+              <div class="ms-auto">
+                <ul class="list-unstyled mb-0">
+                  <li class="list-inline-item text-primary">
+                    <span
+                      class="round-8 text-bg-primary rounded-circle me-1 d-inline-block"
+                    ></span>
+                    Ample
+                  </li>
+                  <li class="list-inline-item text-info">
+                    <span
+                      class="round-8 text-bg-info rounded-circle me-1 d-inline-block"
+                    ></span>
+                    Pixel Admin
+                  </li>
+                </ul>
               </div>
             </div>
+            <div id="sales-overview" class="mt-4 mx-n6"></div>
           </div>
-{% include 'footer.html' %}
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="card text-center p-3 shadow-sm">
+          <h5>Total Trips</h5>
+          <h3>{{total_trips}}</h3>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-center p-3 shadow-sm">
+          <h5>Total Revenue</h5>
+          <h3>₹ 2,45,000</h3>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-center p-3 shadow-sm">
+          <h5>Active Customers</h5>
+          <h3>{{active_customer}}</h3>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-center p-3 shadow-sm">
+          <h5>Pending Bills</h5>
+          <h3>12</h3>
+        </div>
+      </div>
+    </div>
+    <div class="card mt-4">
+      <div class="card-body">
+        <h4 class="card-title">Recent Bills</h4>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Bill ID</th>
+                <th>Customer</th>
+                <th>Trip</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>#B101</td>
+                <td>ABC Logistics</td>
+                <td>Nagpur → Mumbai</td>
+                <td>₹ 12,000</td>
+                <td><span class="badge bg-success">Paid</span></td>
+              </tr>
+              <tr>
+                <td>#B102</td>
+                <td>XYZ Traders</td>
+                <td>Pune → Nashik</td>
+                <td>₹ 8,500</td>
+                <td><span class="badge bg-warning">Pending</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    {% include 'footer.html' %}
+  </div>
+</div>
