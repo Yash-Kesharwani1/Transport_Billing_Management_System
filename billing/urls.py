@@ -37,6 +37,8 @@ urlpatterns = [
     path('edit_party/', wb.edit_party, name='edit_party'),
     path('save_edited_party/', wb.save_edited_party, name='save_edited_party'),
     path('delete_party/', wb.delete_party, name='delete_party'),
+    path('deleted_party/', wb.deleted_party, name='deleted_party'),
+    path('restore_party/', wb.restore_party, name='restore_party'),
 
     # OWNER
     path('owner/', wb.owner, name='owner'),

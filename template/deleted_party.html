@@ -1,0 +1,61 @@
+{% include "header.html" %}
+<h4 class="mt-5 text-center">Party Details Table</h4>
+<button onclick="printTable()" class="btn">Print Table</button>
+<a href="{% url 'download_party_excel' %}" class="btn btn-success">Download Excel</a>
+<div class="body-wrapper-inner">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="table-responsive">
+        <table class="table table-bordered mt-3" id="partyTable">
+          <thead class="table-light">
+            <tr>
+              <th>Action</th>
+              <th>Sr. No.</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Mobile</th>
+              <th>Address</th>
+              <th>City</th>
+              <th>GST Number</th>
+              <th>Pending Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for party in deleted_partys %}
+            <tr>
+              <td>
+                
+                <a href="/restore_party/?id={{party.id}}"
+                  ><button class="btn">Restore</button></a
+                >
+              </td>
+              <td>{{forloop.counter}}</td>
+              <td>{{ party.party_name }}</td>
+              <td>{{ party.party_email }}</td>
+              <td>{{ party.party_mobile }}</td>
+              <td>{{ party.party_address }}</td>
+              <td>{{ party.party_city }}</td>
+              <td>{{ party.party_gst_number }}</td>
+              <td>{{ party.party_pending_amt }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function printTable() {
+    let printContent = document.getElementById("partyTable").outerHTML;
+    let win = window.open("", "", "height=700,width=700");
+    win.document.write("<html><head><title>Print Table</title></head><body>");
+    win.document.write(printContent);
+    win.document.write("</body></html>");
+    win.document.close();
+    win.print();
+  }
+</script>
+
+{% include "footer.html" %}

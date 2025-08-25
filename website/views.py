@@ -197,12 +197,59 @@ def save_edited_party(req):
 
 
 def delete_party(req):
+    # In this function we are moving the party from 'Party' to 'DeletedParty'
     if 'user_login_id' in req.session:
-        models.Party.objects.get(id=req.GET['id']).delete()
+        # 
+
+        party = models.Party.objects.get(id=req.GET['id'])
+        # Save the party in DeletedParty
+        deleted_party = models.DeletedParty(
+            party_name = party.party_name,
+            party_mobile = party.party_mobile,
+            party_email = party.party_email,
+            party_address = party.party_address,
+            party_city = party.party_city,
+            party_gst_number = party.party_gst_number,
+            party_pending_amt = party.party_pending_amt
+        )
+        # save the party in DeletedParty
+        deleted_party.save()
+
+        # delete the party we want to delete completely
+        party.delete()
         return redirect('/party/')
     else:
         return redirect('/login/')
 
+def deleted_party(req):
+    if 'user_login_id' in req.session:
+        deleted_partys = models.DeletedParty.objects.all()
+        return render(req, 'deleted_party.html',{'deleted_partys':deleted_partys})
+    else:
+        return redirect('/login/')
+    
+def restore_party(req):
+    if 'user_login_id' in req.session:
+        restore_party_id = req.GET['id']
+        deleted_party = models.DeletedParty.objects.get(id=restore_party_id)
+        # Add New party to remove it from DeletedParty and show it in Party as Restore
+        party = models.Party(
+            party_name = deleted_party.party_name,
+            party_mobile = deleted_party.party_mobile,
+            party_email = deleted_party.party_email,
+            party_address = deleted_party.party_address,
+            party_city = deleted_party.party_city,
+            party_gst_number = deleted_party.party_gst_number,
+            party_pending_amt = deleted_party.party_pending_amt
+        )
+        # Save the restored party
+        party.save()
+        # delete the restored party from Deleted Party
+        deleted_party.delete()
+        return redirect('/deleted_party/')
+    else:
+        return redirect('/login/')
+    
 
 # ##############################################################################################################################################################
 # Owner
