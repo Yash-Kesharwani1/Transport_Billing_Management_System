@@ -47,6 +47,8 @@ urlpatterns = [
     path('edit_owner/', wb.edit_owner, name='edit_owner'),
     path('save_edited_owner/', wb.save_edited_owner, name='save_edited_owner'),
     path('delete_owner/', wb.delete_owner, name='delete_owner'),
+    path('deleted_owner/', wb.deleted_owner, name='deleted_owner'),
+    path('restore_owner/', wb.restore_owner, name='restore_owner'),
 
     # VEHICLE
     path('vehicle/', wb.vehicle, name='vehicle'),

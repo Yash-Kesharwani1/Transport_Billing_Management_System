@@ -1,0 +1,38 @@
+{% include "header.html" %}
+<div class="body-wrapper-inner">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <h4 class="mt-5 text-center">Owner Details Table</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered mt-3">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Action</th>
+                            <th>Sr. No.</th>
+                            <th>Name</th>
+                            <th>Mobile</th>
+                            <th>Address</th>
+                            <th>Ownwer Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for owner in deleted_owners %}
+                        <tr>
+                            <td>
+                                
+                                <a href="/restore_owner/?id={{owner.id}}"><button class="btn">Restore</button></a>
+                            </td>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{ owner.owner_name}}</td>
+                            <td>{{ owner.owner_mobile }}</td>
+                            <td>{{ owner.owner_type }}</td>
+                            <td>{{ owner.owner_address }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}

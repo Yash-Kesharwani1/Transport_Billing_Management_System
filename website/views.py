@@ -292,6 +292,12 @@ def show_owner(req):
     else:
         return redirect('/login/')
 
+def deleted_owner(req):
+    if 'user_login_id' in req.session:
+        deleted_owners = models.DeletedOwner.objects.all()
+        return render(req,'deleted_owner.html', {'deleted_owners':deleted_owners})
+    else:
+        return redirect('/login/')
 
 def edit_owner(req):
 
@@ -324,10 +330,40 @@ def save_edited_owner(req):
 
 def delete_owner(req):
     if 'user_login_id' in req.session:
-        models.Owner.objects.get(id=req.GET['id']).delete()
+        owner = models.Owner.objects.get(id=req.GET['id'])
+        deleted_owner = models.DeletedOwner(
+            owner_name = owner.owner_name,
+            owner_mobile = owner.owner_mobile,
+            owner_address = owner.owner_address,
+            owner_type = owner.owner_type,
+            balance_amount = owner.balance_amount
+        )
+        # Save the deleted owner in DeletdOwner Table
+        deleted_owner.save()
+        # Delete Owner
+        owner.delete()
         return redirect('/owner/')
     else:
         return redirect('/login/')
+    
+def restore_owner(req):
+    # This function is to restore the owner i.e. delete the owner from DeletedOwner and add the owner to Owner
+    if 'user_login_id' in req.session:
+        restore_owner_id = req.GET['id']
+        restore_owner = models.DeletedOwner.objects.get(id=restore_owner_id)
+        owner = models.Owner(
+            owner_name = restore_owner.owner_name,
+            owner_mobile = restore_owner.owner_mobile,
+            owner_address = restore_owner.owner_address,
+            owner_type = restore_owner.owner_type,
+            balance_amount = restore_owner.balance_amount
+        )
+        owner.save()
+        restore_owner.delete()
+        return redirect('/deleted_owner/')
+    else:
+        return redirect('/login/')
+
 ################################################################################################################################################################
 # Vehicle
 
