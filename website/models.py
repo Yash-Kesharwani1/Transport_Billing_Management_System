@@ -62,8 +62,6 @@ class Vehicle(models.Model):
     vehicle_number = models.CharField()
     owner = models.ForeignKey("Owner", on_delete=models.CASCADE)
     vehicle_type = models.ForeignKey("VehicleType", on_delete=models.CASCADE)
-    # total_hire = models.IntegerField()
-    # advance_amount = models.IntegerField()
     balance_amount = models.IntegerField(default=0)
 
     def __str__(self):
@@ -73,8 +71,6 @@ class DeletedVehicle(models.Model):
     vehicle_number = models.CharField()
     owner = models.ForeignKey("Owner", on_delete=models.CASCADE)
     vehicle_type = models.ForeignKey("VehicleType", on_delete=models.CASCADE)
-    # total_hire = models.IntegerField()
-    # advance_amount = models.IntegerField()
     balance_amount = models.IntegerField(default=0)
 
     def __str__(self):

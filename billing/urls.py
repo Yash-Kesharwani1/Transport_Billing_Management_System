@@ -59,6 +59,8 @@ urlpatterns = [
     path('save_edited_vehicle/', wb.save_edited_vehicle, name='edit_vehicle'),
     path('delete_vehicle/', wb.delete_vehicle, name='delete_vehicle'),
     path('get_all_vehicle/', wb.get_all_vehicle, name='get_all_vehicle'),
+    path('deleted_vehicle/', wb.deleted_vehicle, name='deleted_vehicle'),
+    path('restore_vehicle/', wb.restore_vehicle, name='restore_vehicle'),
 
     # BOOKING
     path('booking/', wb.booking, name='booking'),

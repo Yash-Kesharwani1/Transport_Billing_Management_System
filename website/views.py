@@ -429,6 +429,12 @@ def show_vehicle(req):
     else:
         return redirect('/login/')
 
+def deleted_vehicle(req):
+    if 'user_login_id' in req.session:
+        deleted_vehicles = models.DeletedVehicle.objects.all()
+        return render(req, 'deleted_vehicle.html', {'deleted_vehicles':deleted_vehicles})
+    else:
+        return redirect('/login/')
 
 def edit_vehicle(req):
 
@@ -463,11 +469,37 @@ def save_edited_vehicle(req):
 
 def delete_vehicle(req):
     if 'user_login_id' in req.session:
-        models.Vehicle.objects.get(id=req.GET['id']).delete()
-        return redirect('/vehicle/')
+        vehicle = models.Vehicle.objects.get(id=req.GET['id'])
+        deleted_vehicle = models.DeletedVehicle(
+            vehicle_number = vehicle.vehicle_number,
+            owner = vehicle.owner,
+            vehicle_type = vehicle.vehicle_type,
+            balance_amount = vehicle.balance_amount
+        )
+        # Save the deleted vehicle in DeletedVehicle from Vehicle
+        deleted_vehicle.save()
+        # Delete vehicle from Vehicle
+        vehicle.delete()
+        return redirect('/show_vehicle/')
     else:
         return redirect('/login/')
 
+def restore_vehicle(req):
+    if 'user_login_id' in req.session:
+        restore_vehicle_id = req.GET['id']
+        restore_vehicle = models.DeletedVehicle.objects.get(id=restore_vehicle_id)
+        vehicle = models.Vehicle(
+            vehicle_number = restore_vehicle.vehicle_number,
+            owner = restore_vehicle.owner,
+            vehicle_type = restore_vehicle.vehicle_type,
+            balance_amount = restore_vehicle.balance_amount
+        )
+        vehicle.save()
+        restore_vehicle.delete()
+        return redirect('/deleted_vehicle/')
+    else:
+        return redirect('/login/')
+    
 
 def get_all_vehicle(req):
     if 'user_login_id' in req.session:
