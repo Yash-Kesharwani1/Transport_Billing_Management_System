@@ -50,10 +50,22 @@
 
 <script>
   function printTable() {
-    let printContent = document.getElementById("partyTable").outerHTML;
+    // Clone the table
+    let originalTable = document.getElementById("partyTable");
+    let clonedTable = originalTable.cloneNode(true);
+
+    // Remove the first column from the header
+    for (let row of clonedTable.rows) {
+      row.deleteCell(0);
+    }
+
+    // Open print window
     let win = window.open("", "", "height=700,width=700");
-    win.document.write("<html><head><title>Print Table</title></head><body>");
-    win.document.write(printContent);
+    win.document.write("<html><head><title>Print Table</title>");
+    win.document.write('<style>table, th, td { border: 1px solid black; border-collapse: collapse; padding: 8px; }</style>');
+    win.document.write("</head><body>");
+    win.document.write("<h4 style='text-align:center;'>Party Details Table</h4>");
+    win.document.write(clonedTable.outerHTML);
     win.document.write("</body></html>");
     win.document.close();
     win.print();

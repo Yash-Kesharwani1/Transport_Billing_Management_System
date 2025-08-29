@@ -1,15 +1,16 @@
 {% include "header.html" %}
+<h4 class="mt-5 text-center">Payment Recived Table</h4>
+<button onclick="printTable()" class="btn">Print Table</button>
 <div class="body-wrapper-inner">
     <div class="container-fluid">
         <div class="row justify-content-center">
-            <h4 class="mt-5 text-center">Payment Recived Table</h4>
             <div class="table-responsive">
-                <table class="table table-bordered mt-3">
+                <table class="table table-bordered mt-3" id='paymentRecivedTable'>
                     <thead class="table-light">
                         <tr>
                             <th>Action</th>
                             <th>Sr. No.</th>
-                            <th>Booking Number</th>
+                            {% comment %} <th>Booking Number</th> {% endcomment %}
                             <th>Booking Date</th>
                             <th>Party</th>
                             <th>Cash</th>
@@ -29,7 +30,7 @@
                                 <a href="/delete_payment_recived/?id={{payment_recived.id}}"><button class="btn">Delete</button></a>
                             </td>
                             <td>{{forloop.counter}}</td>
-                            <td>{{ payment_recived.booking_number }}</td>
+                            {% comment %} <td>{{ payment_recived.booking_number }}</td> {% endcomment %}
                             <td>{{ payment_recived.date }}</td>
                             <td>{{ payment_recived.party }}</td>
                             <td>{{ payment_recived.cash }}</td>
@@ -47,4 +48,27 @@
         </div>
     </div>
 </div>
+<script>
+  function printTable() {
+    // Clone the table
+    let originalTable = document.getElementById("paymentRecivedTable");
+    let clonedTable = originalTable.cloneNode(true);
+
+    // Remove the first column from the header
+    for (let row of clonedTable.rows) {
+      row.deleteCell(0);
+    }
+
+    // Open print window
+    let win = window.open("", "", "height=700,width=700");
+    win.document.write("<html><head><title>Print Table</title>");
+    win.document.write('<style>table, th, td { border: 1px solid black; border-collapse: collapse; padding: 8px; }</style>');
+    win.document.write("</head><body>");
+    win.document.write("<h4 style='text-align:center;'>Party Details Table</h4>");
+    win.document.write(clonedTable.outerHTML);
+    win.document.write("</body></html>");
+    win.document.close();
+    win.print();
+  }
+</script>
 {% include 'footer.html' %}

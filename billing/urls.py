@@ -67,6 +67,7 @@ urlpatterns = [
     path('show_booking/', wb.show_booking, name='show_booking'),
     path('save_booking/', wb.save_booking, name='save_booking'),
     path('edit_booking/', wb.edit_booking, name='edit_booking'),
+    path('details_booking/', wb.details_booking, name='details_booking'),
     path('save_edited_booking/', wb.save_edited_booking, name='save_edited_booking'),
     path('delete_booking/', wb.delete_booking, name='delete_booking'),
 

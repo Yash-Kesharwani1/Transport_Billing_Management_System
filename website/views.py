@@ -249,7 +249,35 @@ def restore_party(req):
         return redirect('/deleted_party/')
     else:
         return redirect('/login/')
-    
+
+def download_party_excel(request):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Party Details"
+
+    # Headers
+    headers = ['Name', 'Email', 'Mobile', 'Address',
+               'City', 'GST Number', 'Pending Amount']
+    ws.append(headers)
+
+    # Data rows
+    parties = Party.objects.all()
+    for party in parties:
+        ws.append([
+            party.party_name,
+            party.party_email,
+            party.party_mobile,
+            party.party_address,
+            party.party_city,
+            party.party_gst_number,
+            party.party_pending_amt
+        ])
+
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=party_details.xlsx'
+    wb.save(response)
+    return response
 
 # ##############################################################################################################################################################
 # Owner
@@ -685,6 +713,33 @@ def edit_booking(req):
     else:
         return redirect('/login/')
 
+def details_booking(req):
+
+    if 'user_login_id' in req.session:
+        # Party
+        partys = models.Party.objects.all()
+
+        # Vehicle
+        vehicles = models.Vehicle.objects.all()
+
+        # VehicleType
+        vehicle_types = models.VehicleType.objects.all()
+
+        # State
+        states = models.State.objects.all()
+
+        booking_id = req.GET['id']
+
+        booking = models.Booking.objects.get(id=booking_id)
+
+        obj = {
+            'partys': partys, 'vehicles': vehicles, 'vehicle_types': vehicle_types, 'states': states, 'booking': booking
+        }
+        
+        return render(req, "details_booking.html", obj)
+
+    else:
+        return redirect('/login/')
 
 def save_edited_booking(req):
 
@@ -1132,39 +1187,6 @@ def alert_payment_send_to_vehicle(req):
         return redirect('/login/')
 
 
-# views.py
-
-
-def download_party_excel(request):
-    wb = openpyxl.Workbook()
-    ws = wb.active
-    ws.title = "Party Details"
-
-    # Headers
-    headers = ['Name', 'Email', 'Mobile', 'Address',
-               'City', 'GST Number', 'Pending Amount']
-    ws.append(headers)
-
-    # Data rows
-    parties = Party.objects.all()
-    for party in parties:
-        ws.append([
-            party.party_name,
-            party.party_email,
-            party.party_mobile,
-            party.party_address,
-            party.party_city,
-            party.party_gst_number,
-            party.party_pending_amt
-        ])
-
-    response = HttpResponse(
-        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=party_details.xlsx'
-    wb.save(response)
-    return response
-
-
 def payment_sent_view(request):
     filters = {}
 
@@ -1196,4 +1218,5 @@ def payment_sent_view(request):
     payments = PaymentSent.objects.filter(**filters)
 
     return render(request, 'your_template.html', {'payments': payments})
+
 
